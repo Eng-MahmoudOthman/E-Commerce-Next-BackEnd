@@ -2,26 +2,33 @@
 
 
 
-// // import { createLogger, transports, format } from "winston";
-// // const logger = createLogger({
-// //    level: "info", // مستوى التسجيل: info, error, warn
-// //    format: format.combine(
-// //       format.timestamp(), // يضيف وقت
-// //       format.json()       // يخلي اللوج بصيغة JSON
-// //    ),
-// //    transports: [
-// //       new transports.Console(), // يطبع في التيرمنال
-// //       new transports.File({ filename: "app.log" }) // يسجل في ملف app.log
-// //    ]
-// // });
+// import { createLogger, transports, format } from "winston";
+// const logger = createLogger({
+//    level: "info", // مستوى التسجيل: info, error, warn
+//    format: format.combine(
+//       format.timestamp(), // يضيف وقت
+//       format.json()       // يخلي اللوج بصيغة JSON
+//    ),
+//    transports: [
+//       new transports.Console(), // يطبع في التيرمنال
+//       new transports.File({ filename: "app.log" }) // يسجل في ملف app.log
+//    ]
+// });
 
-// // export default logger;
+// export default logger;
+
+
+
+
+
+
+
+
 
 
 // import moment from "moment-timezone";
 // import { createLogger, transports , format } from "winston";
 // import DailyRotateFile from "winston-daily-rotate-file";
-
 // const logger = createLogger({
 //    level: "info",
 
@@ -52,11 +59,6 @@
 //       }) ,
 //    ]
 // });
-
-
-
-
-
 // // Logger مخصص للـ Requests
 // const requestLogger = createLogger({
 //    level: "info",
@@ -79,10 +81,6 @@
 //       }),
 //    ],
 // });
-
-
-
-
 // export {logger , requestLogger};
 
 
@@ -91,90 +89,72 @@
 
 
 
-// // import { createLogger, transports, format } from "winston";
-
-// // const logger = createLogger({
-// //   level: "info", // المستوى الافتراضي (info وما فوقه)
-// //   format: format.combine(
-// //     format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), // الوقت
-//    //  format.printf(({ level, message, timestamp }) => {
-//    //    return `[${timestamp}] ${level.toUpperCase()}: ${message}`;
-//    //  })
-// //   ),
-// //   transports: [
-// //     // يطبع في الكونسول
-// //     new transports.Console(),
-
-// //     // يخزن في ملف logs/app.log
-// //     new transports.File({ filename: "logs/app.log" })
-// //   ]
-// // });
-
-// // export default logger;
 
 
 
 
 
 
+// import { createLogger, transports, format } from "winston";
+
+// const logger = createLogger({
+//   level: "info", // المستوى الافتراضي (info وما فوقه)
+//   format: format.combine(
+//     format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), // الوقت
+   //  format.printf(({ level, message, timestamp }) => {
+   //    return `[${timestamp}] ${level.toUpperCase()}: ${message}`;
+   //  })
+//   ),
+//   transports: [
+//     // يطبع في الكونسول
+//     new transports.Console(),
+
+//     // يخزن في ملف logs/app.log
+//     new transports.File({ filename: "logs/app.log" })
+//   ]
+// });
+
+// export default logger;
 
 
 
 
+
+
+
+
+
+
+// Deployment By Vercel :
+import { createLogger, format, transports } from "winston";
 import moment from "moment-timezone";
-import { createLogger, transports, format } from "winston";
-import DailyRotateFile from "winston-daily-rotate-file";
-
-const isProduction = process.env.NODE_ENV === "production";
-
-// ------------------- Logger عام -------------------
 const logger = createLogger({
-   // level: "info",
-   // format: format.combine(
-   //    format.timestamp({
-   //       format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss")
-   //    }),
-   //    format.json()
-   // ),
-   // transports: isProduction
-   //    ? [
-   //       new transports.Console() // على Production Console بس
-   //       ]
-   //    : [
-   //       new transports.Console(), // على Local Console كمان
-   //       new DailyRotateFile({
-   //          dirname: "logs/log",
-   //          filename: "app-%DATE%.log",
-   //          datePattern: "YYYY-MM-DD",
-   //          zippedArchive: true,
-   //          maxSize: "20m",
-   //          maxFiles: "30d"
-   //       })
-   //       ]
+   level: "info",
+   format: format.combine(
+      format.timestamp({
+         format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss")
+      }),
+      format.json()
+   ),
+   transports: [
+      new transports.Console() // بس يطبع في Logs بتاعت Vercel
+   ]
 });
-
-// ------------------- Logger للـ Requests -------------------
 const requestLogger = createLogger({
-   // level: "info",
-   // format: format.combine(
-   //    format.timestamp({
-   //       format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss")
-   //    }),
-   //    format.json()
-   // ),
-   // transports: isProduction
-   //    ? [new transports.Console()] // على Production Console بس
-   //    : [
-   //       new transports.Console(),
-   //       new DailyRotateFile({
-   //          dirname: "logs/requests",
-   //          filename: "request-%DATE%.log",
-   //          datePattern: "YYYY-MM-DD",
-   //          zippedArchive: true,
-   //          maxSize: "20m",
-   //          maxFiles: "30d"
-   //       })
-   //    ]
+   level: "info",
+   
+   //^ Timestamp in egypt only :
+   format: format.combine(
+      format.timestamp({
+         format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss")
+      }),
+      format.json()
+   ),
+   transports: [
+      new transports.Console() // بس يطبع في Logs بتاعت Vercel
+   ]
 });
+export {logger , requestLogger};
 
-export { logger, requestLogger };
+
+
