@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import XLSX  from "xlsx" ;
 import ExcelJS from 'exceljs';
-import { logger } from "../utilities/logger.js";
+// import { logger } from "../utilities/logger.js";
 
 
 // ! Not Appear id Into Object in Excel Sheet :
@@ -26,13 +26,13 @@ export const exportDataToExcelWithoutId =  async(data) =>{
          console.log('Data exported to Excel successfully!');
 
          //*------ Logs Here -------- :
-         logger.info(`Data exported to Excel Successfully!'`);
+         // logger.info(`Data exported to Excel Successfully!'`);
 
       return filePath ; // إرجاع المسار الكامل للملف
    } else {
 
          //*------ Logs Here -------- :
-         logger.error(`No data to export Excel !!`);
+         // logger.error(`No data to export Excel !!`);
       console.log('No data to export.');
    }
 }

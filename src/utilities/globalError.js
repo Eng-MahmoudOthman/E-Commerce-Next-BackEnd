@@ -2,7 +2,7 @@ import env from "dotenv"
 
    env.config() ;
 
-const MODE = process.env.MODE
+const MODE = process.env.NODE_ENV
 
 
 

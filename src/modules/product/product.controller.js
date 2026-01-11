@@ -97,161 +97,161 @@ export const getAllProduct = catchError(
 
 
 
-//& Get Single Product :
-export const getSingleProduct = catchError(
-   async(req , res , next)=>{
-      const {slug} = req.params ;
-      const product = await productModel.findOne({slug}) ;
+// //& Get Single Product :
+// export const getSingleProduct = catchError(
+//    async(req , res , next)=>{
+//       const {slug} = req.params ;
+//       const product = await productModel.findOne({slug}) ;
 
-      !product && next(new AppError("Product Not Exist" , 404))
-      product && res.json({message:"success" , product})
-   }
-)
-
-
-//& Create Product :
-export const addProduct = catchError(
-   async(req , res , next)=>{
-      const {title , description , quantity ,  price , priceAfterDiscount , contractPrice} = req.body ;
-
-      let images ;
-
-      //& Check Exist Product :
-      const productExist = await productModel.findOne({title}) ;
-      if(productExist){
-         return next(new AppError("Product Already Exist" , 402))
-      }
-
-      //& File Uploads :
-      if(req.files.length > 0){
-         if(req.files){
-            images = req.files.map((ele)=>{
-               if((ele.size > uploadImageSize)){
-                  return next(new AppError("Size Media Should be Less than 200 k-Byte" , 404))
-               }
-               return ele.filename
-            }) ;
-         }
-      }
-
-      const slug = slugify(title)
-      const product = await productModel.create({
-         title ,
-         slug ,
-         quantity ,
-         description ,
-         price ,
-         priceAfterDiscount , 
-         contractPrice ,
-         image :images[0], 
-         images ,
-         createdBy: req.user._id
-      })
-
-      res.json({message:"success" , product})
-   }
-)
-
-//& Create Product :
-export const updateProduct = catchError(
-   async(req , res , next)=>{
-      const {id} = req.params ;
-      const {title , description , quantity ,  price , priceAfterDiscount , contractPrice} = req.body ;
+//       !product && next(new AppError("Product Not Exist" , 404))
+//       product && res.json({message:"success" , product})
+//    }
+// )
 
 
-      //& Check Exist Product :
-      const product = await productModel.findById(id) ;
-      if(!product){
-         return next(new AppError("Product Not Exist" , 402))
-      }
+// //& Create Product :
+// export const addProduct = catchError(
+//    async(req , res , next)=>{
+//       const {title , description , quantity ,  price , priceAfterDiscount , contractPrice} = req.body ;
 
-      if(title){
-         const slug = slugify(title)
-         product.title = title ;
-         product.slug = slug ;
-      } ;
+//       let images ;
 
-      if(description){
-         product.description = description ;
-      } ;
+//       //& Check Exist Product :
+//       const productExist = await productModel.findOne({title}) ;
+//       if(productExist){
+//          return next(new AppError("Product Already Exist" , 402))
+//       }
 
-      if(quantity){
-         product.quantity = quantity ;
-      } ;
+//       //& File Uploads :
+//       if(req.files.length > 0){
+//          if(req.files){
+//             images = req.files.map((ele)=>{
+//                if((ele.size > uploadImageSize)){
+//                   return next(new AppError("Size Media Should be Less than 200 k-Byte" , 404))
+//                }
+//                return ele.filename
+//             }) ;
+//          }
+//       }
 
-      if(price){
-         product.price = price ;
-      } ;
+//       const slug = slugify(title)
+//       const product = await productModel.create({
+//          title ,
+//          slug ,
+//          quantity ,
+//          description ,
+//          price ,
+//          priceAfterDiscount , 
+//          contractPrice ,
+//          image :images[0], 
+//          images ,
+//          createdBy: req.user._id
+//       })
 
-      if(priceAfterDiscount){
-         product.priceAfterDiscount = priceAfterDiscount ;
-      } ;
+//       res.json({message:"success" , product})
+//    }
+// )
 
-      if(contractPrice){
-         product.contractPrice = contractPrice ;
-      } ;
-
-      await product.save() ;
-      res.json({message:"success" , product})
-   }
-)
-
-//& Create Product :
-export const changeProductImages = catchError(
-   async(req , res , next)=>{
-      const {id} = req.params ;
-      const {description , quantity ,  price , priceAfterDiscount , contractPrice} = req.body ;
-
-      let images ;
-
-      //& Check Exist Product :
-      const product = await productModel.findByIdAndUpdate( id ,  {
-         description , 
-         quantity ,  
-         price , 
-         priceAfterDiscount , 
-         contractPrice
-      } , {new:true}) ;
-
-      if(productExist){
-         return next(new AppError("Product Not Exist" , 402))
-      }
-
-      //& File Uploads :
-      if(req.files.length > 0){
-         if(req.files){
-            images = req.files.map((ele)=>{
-               if((ele.size > uploadImageSize)){
-                  return next(new AppError("Size Media Should be Less than 200 k-Byte" , 404))
-               }
-               return ele.filename
-            }) ;
-         }
-      }
-
-      res.json({message:"success" , product})
-   }
-)
+// //& Create Product :
+// export const updateProduct = catchError(
+//    async(req , res , next)=>{
+//       const {id} = req.params ;
+//       const {title , description , quantity ,  price , priceAfterDiscount , contractPrice} = req.body ;
 
 
-//& Delete Product :
-export const deleteProduct = catchError(
-   async(req , res , next)=>{
-      const {id} = req.params ;
-      const product = await productModel.findByIdAndDelete(id , {new:true}) ;
-      if(!product) return next(new AppError("Product Not Exist" , 404))
+//       //& Check Exist Product :
+//       const product = await productModel.findById(id) ;
+//       if(!product){
+//          return next(new AppError("Product Not Exist" , 402))
+//       }
+
+//       if(title){
+//          const slug = slugify(title)
+//          product.title = title ;
+//          product.slug = slug ;
+//       } ;
+
+//       if(description){
+//          product.description = description ;
+//       } ;
+
+//       if(quantity){
+//          product.quantity = quantity ;
+//       } ;
+
+//       if(price){
+//          product.price = price ;
+//       } ;
+
+//       if(priceAfterDiscount){
+//          product.priceAfterDiscount = priceAfterDiscount ;
+//       } ;
+
+//       if(contractPrice){
+//          product.contractPrice = contractPrice ;
+//       } ;
+
+//       await product.save() ;
+//       res.json({message:"success" , product})
+//    }
+// )
+
+// //& Create Product :
+// export const changeProductImages = catchError(
+//    async(req , res , next)=>{
+//       const {id} = req.params ;
+//       const {description , quantity ,  price , priceAfterDiscount , contractPrice} = req.body ;
+
+//       let images ;
+
+//       //& Check Exist Product :
+//       const product = await productModel.findByIdAndUpdate( id ,  {
+//          description , 
+//          quantity ,  
+//          price , 
+//          priceAfterDiscount , 
+//          contractPrice
+//       } , {new:true}) ;
+
+//       if(productExist){
+//          return next(new AppError("Product Not Exist" , 402))
+//       }
+
+//       //& File Uploads :
+//       if(req.files.length > 0){
+//          if(req.files){
+//             images = req.files.map((ele)=>{
+//                if((ele.size > uploadImageSize)){
+//                   return next(new AppError("Size Media Should be Less than 200 k-Byte" , 404))
+//                }
+//                return ele.filename
+//             }) ;
+//          }
+//       }
+
+//       res.json({message:"success" , product})
+//    }
+// )
+
+
+// //& Delete Product :
+// export const deleteProduct = catchError(
+//    async(req , res , next)=>{
+//       const {id} = req.params ;
+//       const product = await productModel.findByIdAndDelete(id , {new:true}) ;
+//       if(!product) return next(new AppError("Product Not Exist" , 404))
       
 
-      //^ Delete Image from Server Disk Local :
-      if(product.images.length > 0){
-         for (const ele of product.images) {
-            const fileName = "Uploads/products/" + path.basename(ele)
-            if (fs.existsSync(path.resolve(fileName))) {
-               fs.unlinkSync(path.resolve(fileName))
-            }
-         }
-      }
+//       //^ Delete Image from Server Disk Local :
+//       if(product.images.length > 0){
+//          for (const ele of product.images) {
+//             const fileName = "Uploads/products/" + path.basename(ele)
+//             if (fs.existsSync(path.resolve(fileName))) {
+//                fs.unlinkSync(path.resolve(fileName))
+//             }
+//          }
+//       }
 
-      product && res.json({message:"success" , product})
-   }
-) ;
+//       product && res.json({message:"success" , product})
+//    }
+// ) ;

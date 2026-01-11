@@ -24,7 +24,7 @@ import cookieParser from "cookie-parser";
 //!========================================================================================
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import { logger } from './src/utilities/logger.js';
+// import { logger } from './src/utilities/logger.js';
 //!========================================================================================
 
 
@@ -91,7 +91,7 @@ dbConnection() ;
 
 export const server = app.listen(PORT , () => {
    //*------ Logs Here -------- :
-   logger.info(`✅ Server is running Successfully...`);
+   // logger.info(`✅ Server is running Successfully...`);
    console.log(`✅ Server is running ....`)
 }) ;
 

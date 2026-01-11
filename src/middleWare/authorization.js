@@ -1,6 +1,6 @@
 import { AppError } from "../utilities/AppError.js";
 import { catchError } from "../utilities/catchError.js";
-import { logger } from "../utilities/logger.js";
+// import { logger } from "../utilities/logger.js";
 
 
 
@@ -13,7 +13,7 @@ export const authorize = (...roles)=>{
          if(!req.user.confirmedEmail){
 
             //*------ Logs Here -------- :
-            logger.error(`Forbidden, Account Not Confirmed, Please Confirmed Email..! -  Name:${req.user.name} , id:${req.user._id}`);
+            // logger.error(`Forbidden, Account Not Confirmed, Please Confirmed Email..! -  Name:${req.user.name} , id:${req.user._id}`);
             return next(new AppError("Forbidden, Account Not Confirmed, Please Confirmed Email.!" , 403)) ;
          }
          //^ Check User Role ----------- :
@@ -21,7 +21,7 @@ export const authorize = (...roles)=>{
          if(!adminRole){
 
             //*------ Logs Here -------- :
-            logger.warn(`Not Authorization Entered..! -  Name:${req.user.name} , Role:${req.user.role} , id:${req.user._id}`);
+            // logger.warn(`Not Authorization Entered..! -  Name:${req.user.name} , Role:${req.user.role} , id:${req.user._id}`);
             return next(new AppError("Not Authorization Entered..!" , 403))
          } 
             

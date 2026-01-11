@@ -5,7 +5,7 @@ import xss from "xss-clean";
 import mongoSanitize from "express-mongo-sanitize";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
-import {requestLogger} from "../utilities/logger.js";
+// import {requestLogger} from "../utilities/logger.js";
 import morgan from "morgan";
 import { customAlphabet} from 'nanoid' ;
 const nanoid = customAlphabet('0123456789', 6) ;
@@ -114,11 +114,11 @@ export const applySecurityMiddlewares = (app) => {
       app.use(
          morgan(
             '[:id] :method :url :status :response-time ms',
-            {
-               stream: {
-               write: (message) => requestLogger.info(message.trim()) // يكتب في اللوج
-               }
-            }
+            // {
+            //    stream: {
+            //    write: (message) => requestLogger.info(message.trim()) // يكتب في اللوج
+            //    }
+            // }
          )
       );
 };

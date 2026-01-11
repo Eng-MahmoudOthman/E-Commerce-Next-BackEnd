@@ -4,7 +4,7 @@ import { couponModel } from "../../../DataBase/models/coupon.model.js";
 import { productModel } from "../../../DataBase/models/product.model.js";
 import { AppError } from "../../utilities/AppError.js";
 import { catchError } from "../../utilities/catchError.js";
-import { logger } from "../../utilities/logger.js";
+// import { logger } from "../../utilities/logger.js";
 
 
 
@@ -89,7 +89,7 @@ export const ClearCart = catchError(
       const cart = await cartModel.findOneAndDelete({user:req.user._id}) ;
 
       //*------ Logs Here -------- :
-      logger.info(`Clear Cart Successfully.! -  Name:${req.user.name}  , CartId:${cart._id} , id:${req.user._id}`);
+      // logger.info(`Clear Cart Successfully.! -  Name:${req.user.name}  , CartId:${cart._id} , id:${req.user._id}`);
 
       !cart &&  next(new AppError("Cart Not Exist" , 404))
       cart && res.json({message:"success" , cart})
@@ -116,7 +116,7 @@ export const applyCoupon = catchError(
       const cartAfterDiscount = await cartModel.findOne({user:req.user._id}).populate("cartItems.product" , "title image description rateCount rateAvg");
 
       //*------ Logs Here -------- :
-      logger.info(`Apply Coupon on Cart Successfully.! -  Name:${req.user.name}  , CartId:${cart._id} , id:${req.user._id}`);
+      // logger.info(`Apply Coupon on Cart Successfully.! -  Name:${req.user.name}  , CartId:${cart._id} , id:${req.user._id}`);
       
       res.json({message:"success" , cart:cartAfterDiscount})
    }

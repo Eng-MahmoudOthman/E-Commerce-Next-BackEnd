@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import multer from "multer";
 import { AppError } from "../utilities/AppError.js";
-import { logger } from "../utilities/logger.js";
+// import { logger } from "../utilities/logger.js";
 
 const uniqueNumber = customAlphabet("123456789" , 5)
 

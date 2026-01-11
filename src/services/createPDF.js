@@ -2,7 +2,7 @@ import puppeteer from 'puppeteer';
 import { generateDate } from './generateDateTime.js';
 import fs from 'fs';
 import path from 'path';
-import { logger } from '../utilities/logger.js';
+// import { logger } from '../utilities/logger.js';
 
 
 const date = generateDate();
@@ -65,6 +65,6 @@ export let createPDF = async (template , data , fileName) => {
 
 
    //*------ Logs Here -------- :
-   logger.info(`✅ Create PDF File Name [${filePath}] Successfully...`);
+   // logger.info(`✅ Create PDF File Name [${filePath}] Successfully...`);
    return filePath;
 };

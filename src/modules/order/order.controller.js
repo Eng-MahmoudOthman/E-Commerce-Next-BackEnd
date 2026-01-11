@@ -19,7 +19,7 @@ import { getNextItemNumber } from "../../handlers/getNextItemNumber.js";
 import { getDateRange } from "../../services/getDateRange.js";
 import { cartModel } from "../../../DataBase/models/cart.model.js";
 import { productModel } from "../../../DataBase/models/product.model.js";
-import { logger } from "../../utilities/logger.js";
+// import { logger } from "../../utilities/logger.js";
 env.config() ;
 
 
@@ -233,11 +233,11 @@ export const createCashOrder = catchError(
          await createPDF(invoiceTemplate , newOrder , `invoice_${nameSlug}_${invoice_number}`);
 
          //*------ Logs Here -------- :
-         logger.info(`Create Invoice Order Cash Successfully.! -  Name:${req.user.name} , id:${req.user._id}`);
+         // logger.info(`Create Invoice Order Cash Successfully.! -  Name:${req.user.name} , id:${req.user._id}`);
 
       } catch (error) {
          //*------ Logs Here -------- :
-         logger.error(`Created Invoice Order Cash is Failed.! [${error.message}] -  Name:${req.user.name} , id:${req.user._id}`);
+         // logger.error(`Created Invoice Order Cash is Failed.! [${error.message}] -  Name:${req.user.name} , id:${req.user._id}`);
          return next(new AppError(error.message, 500));
          // return next(new AppError("Invoice PDF creation failed", 500));
       }
@@ -267,13 +267,12 @@ export const createCashOrder = catchError(
       //^ 10- Return in Response New Order :
       if(!newOrder){
          //*------ Logs Here -------- :
-         logger.error(`Cash Order Failed.! -  Name:${req.user.name} , id:${req.user._id}`);
-
+         // logger.error(`Cash Order Failed.! -  Name:${req.user.name} , id:${req.user._id}`);
          return next(new AppError("Cash Order Failed", 400)) ;
       } 
 
       //*------ Logs Here -------- :
-      logger.info(`Created Cash Order Successfully.! -  Name:${req.user.name} , OrderId:${newOrder._id}  , id:${req.user._id}`);
+      // logger.info(`Created Cash Order Successfully.! -  Name:${req.user.name} , OrderId:${newOrder._id}  , id:${req.user._id}`);
       res.json({message:"success", order:newOrder});
    }
 ) ;
@@ -295,7 +294,7 @@ export const deleteOrder = catchError(
 
 
       //*------ Logs Here -------- :
-      logger.info(`Delete Order Successfully.! -  Name:${req.user.name} , OrderId:${id}  , id:${req.user._id}`);
+      // logger.info(`Delete Order Successfully.! -  Name:${req.user.name} , OrderId:${id}  , id:${req.user._id}`);
       res.json({message:"success" })
    }
 ) ;
@@ -374,7 +373,7 @@ const BASE_URL = process.env.BASE_URL ;
 
          const invoice = response.data ;
          //*------ Logs Here -------- :
-         logger.info(`Create Session Payment Fawaterak Successfully.! -  Name:${req.user.name}  , id:${req.user._id}`);
+         // logger.info(`Create Session Payment Fawaterak Successfully.! -  Name:${req.user.name}  , id:${req.user._id}`);
 
          res.json({ success: true, invoice: invoice.data });
       } catch (error) {
@@ -481,11 +480,11 @@ const BASE_URL = process.env.BASE_URL ;
          await createPDF(invoiceTemplate , newOrder , `invoice_${nameSlug}_${invoice_number}`);
 
          //*------ Logs Here -------- :
-         logger.info(`Create InvoiceOrder Online Payment Successfully.! -  Name:${req.user.name} , id:${req.user._id}`);
+         // logger.info(`Create InvoiceOrder Online Payment Successfully.! -  Name:${req.user.name} , id:${req.user._id}`);
       } catch (error) {
 
          //*------ Logs Here -------- :
-         logger.error(`Created Invoice Order Online Payment Cash is Failed.! [${error.message}] -  Name:${req.user.name} , id:${req.user._id}`);
+         // logger.error(`Created Invoice Order Online Payment Cash is Failed.! [${error.message}] -  Name:${req.user.name} , id:${req.user._id}`);
          return next(new AppError(error.message, 500));
          // return next(new AppError("Invoice PDF creation failed", 500));
       }
@@ -515,12 +514,12 @@ const BASE_URL = process.env.BASE_URL ;
       //^ 10- Return in Response New Order :
       if(!newOrder){
          //*------ Logs Here -------- :
-         logger.error(`Online Order  Failed.! -    Name:${req.user.name} , id:${req.user._id}`);
+         // logger.error(`Online Order  Failed.! -    Name:${req.user.name} , id:${req.user._id}`);
          return next(new AppError("Online Order Failed", 400)) ;
       } 
 
       //*------ Logs Here -------- :
-      logger.info(`Created Online Order Successfully.! -    Name:${req.user.name} , id:${req.user._id} , OrderId:${newOrder._id}`)
+      // logger.info(`Created Online Order Successfully.! -    Name:${req.user.name} , id:${req.user._id} , OrderId:${newOrder._id}`)
 
       res.json({message:"success", order:newOrder});
    } ;

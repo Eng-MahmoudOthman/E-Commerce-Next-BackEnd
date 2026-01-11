@@ -11,7 +11,7 @@ import { getNextItemNumber } from "../../handlers/getNextItemNumber.js";
 import { generateAccessToken, generateRefreshToken } from "../../handlers/generateToken.js";
 import { sessionModel } from "../../../DataBase/models/session.model.js";
 import { createSessionRefreshToken } from "../../handlers/createSession.js";
-import {logger} from "../../utilities/logger.js";
+// import {logger} from "../../utilities/logger.js";
 
 // logger.error("حصل خطأ في قاعدة البيانات");
 
@@ -53,7 +53,7 @@ const NODE_ENV = process.env.NODE_ENV ;
          if(!user) return next(new AppError("User Not Added" , 404)) ;
 
          //*------ Logs Here -------- :
-         logger.info(`Registration is successfully Named: ${user._id , user.name}`);
+         // logger.info(`Registration is successfully Named: ${user._id , user.name}`);
          res.json({message:"success"})
       }
    ) ;
@@ -72,7 +72,7 @@ const NODE_ENV = process.env.NODE_ENV ;
          if(user.isBlocked) {
 
             //*------ Logs Here -------- :
-            logger.warn(`User is Blocked.! Named: ${user._id , user.name}`);
+            // logger.warn(`User is Blocked.! Named: ${user._id , user.name}`);
             return next(new AppError("Unauthorized, User Blocked..❌" , 401)) ;
          }
          
@@ -85,14 +85,14 @@ const NODE_ENV = process.env.NODE_ENV ;
                await user.save();
 
                //*------ Logs Here -------- :
-               logger.warn(`Too many attempts. Account locked.! -  Name:${user.name} , id:${user._id}`);
+               // logger.warn(`Too many attempts. Account locked.! -  Name:${user.name} , id:${user._id}`);
                return next(new AppError(`Too many attempts. Account locked for ${LOCK_TIME_MINUTES} minutes.`,403));
             }
 
             await user.save();
 
             //*------ Logs Here -------- :
-            logger.warn(`Invalid credentials, Email Or Password Incorrect.! Named: ${user._id , user.name}`);
+            // logger.warn(`Invalid credentials, Email Or Password Incorrect.! Named: ${user._id , user.name}`);
             return next(new AppError("Invalid credentials, Email Or Password Incorrect", 401));
          }
 
@@ -103,12 +103,12 @@ const NODE_ENV = process.env.NODE_ENV ;
          if(!user.confirmedEmail) {
 
             //*------ Logs Here -------- :
-            logger.error(`Forbidden, Account Not Confirmed.! -  Name:${user.name} , id:${user._id}`);
+            // logger.error(`Forbidden, Account Not Confirmed.! -  Name:${user.name} , id:${user._id}`);
             return res.json({message:"Forbidden, Account Not Confirmed, Please Confirmed Email.!" , user:loggedUser })
          }
 
          //*------ Logs Here -------- :
-         logger.info(`Login User - Name:${loggedUser.name} , id:${loggedUser._id}`);
+         // logger.info(`Login User - Name:${loggedUser.name} , id:${loggedUser._id}`);
          res.json({message:"success" ,  user:loggedUser }) ;
       }
    ) ;
@@ -229,7 +229,7 @@ const NODE_ENV = process.env.NODE_ENV ;
          const LoggedUser = await userModel.findById(user._id).select("-password -itemNumber -creationTimeAt") ;
 
          //*------ Logs Here -------- :
-         logger.info(`Change Password Successfully.! -  Name:${user.name}  , id:${user._id}`);
+         // logger.info(`Change Password Successfully.! -  Name:${user.name}  , id:${user._id}`);
          return res.json({message:"success" , user:LoggedUser})
       }
    ) ;
@@ -262,7 +262,7 @@ const NODE_ENV = process.env.NODE_ENV ;
          await sendEmail(user.email , subject , codeHtml )
 
          //*------ Logs Here -------- :
-         logger.info(`Send OTP To Personal Email Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
+         // logger.info(`Send OTP To Personal Email Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
          res.json({message:"Send OTP To Personal Email Successfully."})
       }
    ) ;
@@ -282,7 +282,7 @@ const NODE_ENV = process.env.NODE_ENV ;
          } , {new:true})
 
          //*------ Logs Here -------- :
-         logger.info(`Activated Account Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
+         // logger.info(`Activated Account Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
          return res.json({message:"Activated Account Successfully" , user:updateUser}) ;
       }
    ) ;
@@ -320,7 +320,7 @@ const NODE_ENV = process.env.NODE_ENV ;
          sendEmail(user.email , subject , codeHtml ) ;
 
          //*------ Logs Here -------- :
-         logger.info(`OTP sent to your Email Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
+         // logger.info(`OTP sent to your Email Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
          res.json({ message: "OTP sent to your email" });
 
       }
@@ -346,7 +346,7 @@ const NODE_ENV = process.env.NODE_ENV ;
          await user.save();
 
          //*------ Logs Here -------- :
-         logger.info(`OTP Verified Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
+         // logger.info(`OTP Verified Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
          res.json({message:"OTP Verified Successfully" , resetToken})
       }
    ) ;
@@ -377,7 +377,7 @@ const NODE_ENV = process.env.NODE_ENV ;
          sendEmail(user.email , subject , codeHtml ) ;
 
          //*------ Logs Here ------  :
-         logger.info(`Reset Password Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
+         // logger.info(`Reset Password Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
 
          res.json({message:"Reset Password successfully" , newPassword }) ;
       }
@@ -408,7 +408,7 @@ const NODE_ENV = process.env.NODE_ENV ;
          if(user.isBlocked){ 
 
             //*------ Logs Here -------- :
-            logger.info(`Unauthorized Logged By Google, User Blocked..❌ -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
+            // logger.info(`Unauthorized Logged By Google, User Blocked..❌ -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
             return next(new AppError("Unauthorized, User Blocked..❌" , 401)) ;
          }
 
@@ -454,7 +454,7 @@ const NODE_ENV = process.env.NODE_ENV ;
          }) ;
 
          //*------ Logs Here -------- :
-         logger.info(`Login Google Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
+         // logger.info(`Login Google Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
          res.redirect(`${process.env.REDIRECT_URL_GOOGLE}/#/user/LoginSuccessGoogle`);
       }
    ) ;
@@ -473,7 +473,7 @@ const NODE_ENV = process.env.NODE_ENV ;
       res.clearCookie("accessToken");
 
       //*------ Logs Here -------- :
-      logger.info(`Logged Out Successfully.! -  Name:${req.user.name} , Email:${req.user.email}  , id:${req.user._id}`);
+      // logger.info(`Logged Out Successfully.! -  Name:${req.user.name} , Email:${req.user.email}  , id:${req.user._id}`);
       res.json({ message: "Logged out successfully" });
    } ;
 
@@ -488,6 +488,6 @@ const NODE_ENV = process.env.NODE_ENV ;
       res.clearCookie("accessToken");
 
       //*------ Logs Here -------- :
-      logger.info(`Logged out from all devices Successfully.! -  Name:${req.user.name} , Email:${req.user.email}  , id:${req.user._id}`);
+      // logger.info(`Logged out from all devices Successfully.! -  Name:${req.user.name} , Email:${req.user.email}  , id:${req.user._id}`);
       res.json({ message: "Logged out successfully from all devices" });
    } ;

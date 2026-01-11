@@ -1,6 +1,6 @@
 import { userModel } from "../../DataBase/models/user.model.js";
 import { AppError } from "../utilities/AppError.js";
-import { logger } from "../utilities/logger.js";
+// import { logger } from "../utilities/logger.js";
 
 
 
@@ -10,7 +10,6 @@ import { logger } from "../utilities/logger.js";
 // Protection From Many Wrong Password Entered :
 export const checkLoginAttempts = async (req, res, next) => {
    const { userAccount } = req.body;
-
 
    const user = await userModel.findOne({
       $or:[
@@ -25,7 +24,7 @@ export const checkLoginAttempts = async (req, res, next) => {
    if (user.lockUntil && user.lockUntil > Date.now()) {
 
       //*------ Logs Here -------- :
-      logger.warn(`Too many attempts. Account locked.! -  Name:${user.name} , id:${user._id}`);
+      // logger.warn(`Too many attempts. Account locked.! -  Name:${user.name} , id:${user._id}`);
       return next(new AppError("Account locked. Try again later after 5 minutes .!", 403));
    }
 

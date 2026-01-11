@@ -70,7 +70,7 @@ export const addCoupon = catchError(
       }) ;
 
       //*------ Logs Here -------- :
-      logger.info(`Create Coupon Successfully.! -  Name:${user.name} , CouponId:${coupon._id}  , id:${user._id}`);
+      // logger.info(`Create Coupon Successfully.! -  Name:${user.name} , CouponId:${coupon._id}  , id:${user._id}`);
 
       res.json({message:"success" , coupon})
    }

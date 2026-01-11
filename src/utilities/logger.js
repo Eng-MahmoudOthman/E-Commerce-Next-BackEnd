@@ -123,38 +123,3 @@
 
 
 
-
-
-// Deployment By Vercel :
-import { createLogger, format, transports } from "winston";
-import moment from "moment-timezone";
-const logger = createLogger({
-   level: "info",
-   format: format.combine(
-      format.timestamp({
-         format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss")
-      }),
-      format.json()
-   ),
-   transports: [
-      new transports.Console() // بس يطبع في Logs بتاعت Vercel
-   ]
-});
-const requestLogger = createLogger({
-   level: "info",
-   
-   //^ Timestamp in egypt only :
-   format: format.combine(
-      format.timestamp({
-         format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss")
-      }),
-      format.json()
-   ),
-   transports: [
-      new transports.Console() // بس يطبع في Logs بتاعت Vercel
-   ]
-});
-export {logger , requestLogger};
-
-
-
