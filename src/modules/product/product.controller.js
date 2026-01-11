@@ -1,12 +1,12 @@
-import slugify from "slugify";
+// import slugify from "slugify";
 import { ApiFeature } from "../../utilities/apiFeatures.js";
 import { productModel } from "../../../DataBase/models/product.model.js";
 import { catchError } from "../../utilities/catchError.js";
 import { AppError } from "../../utilities/AppError.js";
-import fs from "fs";
-import path from "path";
+// import fs from "fs";
+// import path from "path";
 
-const uploadImageSize = Number(process.env.UPLOAD_IMAGE_SIZE) || 2000000;
+// const uploadImageSize = Number(process.env.UPLOAD_IMAGE_SIZE) || 2000000;
 
 
 

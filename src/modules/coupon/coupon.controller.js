@@ -41,84 +41,83 @@ export const getAllCoupon = catchError(
 
 
 
-// "percentage", "fixed"
 
-//& Add New Coupon :
-export const addCoupon = catchError(
-   async(req , res , next)=>{
-      req.body.createdBy = req.user._id
-      const{code , discountValue , discountType ,  expired} = req.body ;
+// //& Add New Coupon :
+// export const addCoupon = catchError(
+//    async(req , res , next)=>{
+//       req.body.createdBy = req.user._id
+//       const{code , discountValue , discountType ,  expired} = req.body ;
 
-      //^ Check Coupon Expired Date :
-      const currentDate = new Date();
-      const expiryDate = new Date(expired); 
-      expiryDate.setHours(23 , 59 , 59 , 999) ;
-      if(currentDate > expiryDate) return next(new AppError("Not Valid Coupon, Coupon Already Expired.!")) ;
+//       //^ Check Coupon Expired Date :
+//       const currentDate = new Date();
+//       const expiryDate = new Date(expired); 
+//       expiryDate.setHours(23 , 59 , 59 , 999) ;
+//       if(currentDate > expiryDate) return next(new AppError("Not Valid Coupon, Coupon Already Expired.!")) ;
       
       
-      //^ Check Coupon Already Exist :
-      const couponExist = await couponModel.findOne({code}) ;
-      if(couponExist) return next(new AppError("Coupon Already Exist")) ;
+//       //^ Check Coupon Already Exist :
+//       const couponExist = await couponModel.findOne({code}) ;
+//       if(couponExist) return next(new AppError("Coupon Already Exist")) ;
 
 
-      const coupon = await couponModel.create({
-         code ,
-         discountValue ,
-         discountType ,
-         expired ,
-         createdBy:req.user._id
-      }) ;
+//       const coupon = await couponModel.create({
+//          code ,
+//          discountValue ,
+//          discountType ,
+//          expired ,
+//          createdBy:req.user._id
+//       }) ;
 
-      //*------ Logs Here -------- :
-      // logger.info(`Create Coupon Successfully.! -  Name:${user.name} , CouponId:${coupon._id}  , id:${user._id}`);
+//       //*------ Logs Here -------- :
+//       // logger.info(`Create Coupon Successfully.! -  Name:${user.name} , CouponId:${coupon._id}  , id:${user._id}`);
 
-      res.json({message:"success" , coupon})
-   }
-)
-
-
+//       res.json({message:"success" , coupon})
+//    }
+// )
 
 
-//& Get Single Coupon :
-export const getSingleCoupon = catchError(
-   async(req , res , next)=>{
-      const{id} = req.params;
-      const coupon = await couponModel.findById(id) ;
+
+
+// //& Get Single Coupon :
+// export const getSingleCoupon = catchError(
+//    async(req , res , next)=>{
+//       const{id} = req.params;
+//       const coupon = await couponModel.findById(id) ;
       
-      !coupon && next(new AppError("Coupon Not Exist" , 404))
-      coupon && res.json({message:"success" , coupon})
-   }
-)
+//       !coupon && next(new AppError("Coupon Not Exist" , 404))
+//       coupon && res.json({message:"success" , coupon})
+//    }
+// )
 
 
 
-//& Update coupon By Id :
-export const updateCoupon = catchError(
-   async(req , res , next)=>{
-      const{id} = req.params;
-      const {code , expired , discountValue , discountType} = req.body ;
+// //& Update coupon By Id :
+// export const updateCoupon = catchError(
+//    async(req , res , next)=>{
+//       const{id} = req.params;
+//       const {code , expired , discountValue , discountType} = req.body ;
 
 
-      // 1- Check new user name or email not exist in database and not same name or email to this id :
-      const duplicateCoupon = await couponModel.findOne({ code , _id: { $ne: id } });
-      if (duplicateCoupon) return next(new AppError("Code Already Exists", 400));
+//       // 1- Check new user name or email not exist in database and not same name or email to this id :
+//       const duplicateCoupon = await couponModel.findOne({ code , _id: { $ne: id } });
+//       if (duplicateCoupon) return next(new AppError("Code Already Exists", 400));
 
-      const coupon = await couponModel.findByIdAndUpdate(id  , {code , expired , discountValue , discountType} , {new:true}) ;
+//       const coupon = await couponModel.findByIdAndUpdate(id  , {code , expired , discountValue , discountType} , {new:true}) ;
 
-      !coupon &&  next(new AppError("Coupon Not Exist" , 404))
-      coupon && res.json({message:"success" , coupon})
-   }
-)
-
-
-//& Delete Coupon :
-export const deleteCoupon = catchError(
-   async(req , res , next)=>{
-      const{id} = req.params;
-      const coupon = await couponModel.findByIdAndDelete(id) ;
+//       !coupon &&  next(new AppError("Coupon Not Exist" , 404))
+//       coupon && res.json({message:"success" , coupon})
+//    }
+// )
 
 
-      !coupon &&  next(new AppError("Coupon Not Exist" , 404))
-      coupon && res.json({message:"success" , coupon})
-   }
-)
+// //& Delete Coupon :
+// export const deleteCoupon = catchError(
+//    async(req , res , next)=>{
+//       const{id} = req.params;
+//       const coupon = await couponModel.findByIdAndDelete(id) ;
+
+
+//       !coupon &&  next(new AppError("Coupon Not Exist" , 404))
+//       coupon && res.json({message:"success" , coupon})
+//    }
+// )

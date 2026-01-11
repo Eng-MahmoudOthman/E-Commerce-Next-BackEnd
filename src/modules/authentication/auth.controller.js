@@ -114,350 +114,350 @@ const NODE_ENV = process.env.NODE_ENV ;
    ) ;
 
 
-//& Create Refresh Token And Access Token :
-   export const refreshAccessToken = catchError(
-      async (req, res, next) =>{
-         const refreshToken = req.cookies.refreshToken ;
-         const userAgent = req.headers["user-agent"] || "Unknown" ;
-         const sessionID =  nanoid() ;
-         const deviceIP =
-            req.headers["x-forwarded-for"]?.split(",")[0] ||      // لو السيرفر وراه Proxy
-            req.connection?.remoteAddress || 
-            req.socket?.remoteAddress ||
-            req.ip ;
+// //& Create Refresh Token And Access Token :
+//    export const refreshAccessToken = catchError(
+//       async (req, res, next) =>{
+//          const refreshToken = req.cookies.refreshToken ;
+//          const userAgent = req.headers["user-agent"] || "Unknown" ;
+//          const sessionID =  nanoid() ;
+//          const deviceIP =
+//             req.headers["x-forwarded-for"]?.split(",")[0] ||      // لو السيرفر وراه Proxy
+//             req.connection?.remoteAddress || 
+//             req.socket?.remoteAddress ||
+//             req.ip ;
 
 
-         if (!refreshToken){
-               //& Delete Cookies From Browser :
-               res.clearCookie("accessToken");
-               res.clearCookie("refreshToken");
-            return next(new AppError("Already logged out or session expired. , please login again" , 401)) ;
-         }
+//          if (!refreshToken){
+//                //& Delete Cookies From Browser :
+//                res.clearCookie("accessToken");
+//                res.clearCookie("refreshToken");
+//             return next(new AppError("Already logged out or session expired. , please login again" , 401)) ;
+//          }
 
 
-         // ✅ دور على السيشن في DB
-         const session = await sessionModel.findOne({ refreshToken });
-         if (!session) return next(new AppError("Invalid Refresh Token" , 401)) ;
+//          // ✅ دور على السيشن في DB
+//          const session = await sessionModel.findOne({ refreshToken });
+//          if (!session) return next(new AppError("Invalid Refresh Token" , 401)) ;
 
 
-         if (session.userAgent !== userAgent || session.deviceIP !== deviceIP) {
-            return next(new AppError("Device mismatch" , 403)) ;
-         }
+//          if (session.userAgent !== userAgent || session.deviceIP !== deviceIP) {
+//             return next(new AppError("Device mismatch" , 403)) ;
+//          }
 
 
-         try {
-            const decoded = jwt.verify(refreshToken , SECRET_KEY_REFRESH);
-            const user = await userModel.findById({_id : decoded.user}).select("-password -itemNumber -creationTimeAt") ;
+//          try {
+//             const decoded = jwt.verify(refreshToken , SECRET_KEY_REFRESH);
+//             const user = await userModel.findById({_id : decoded.user}).select("-password -itemNumber -creationTimeAt") ;
 
-            // Create Refresh Token And Access Token :
-            const accessToken = generateAccessToken(res , user) ;
+//             // Create Refresh Token And Access Token :
+//             const accessToken = generateAccessToken(res , user) ;
 
-            return res.json({message:"success" ,  user });
-         } catch (err) {
-            if(NODE_ENV === "development"){
-               console.log(err);
-            } ;
+//             return res.json({message:"success" ,  user });
+//          } catch (err) {
+//             if(NODE_ENV === "development"){
+//                console.log(err);
+//             } ;
 
-            //& Delete All Old Session and Clear Cookies From Browser :
-            await sessionModel.deleteMany({ user: user._id });
-            res.clearCookie("accessToken");
-            res.clearCookie("refreshToken");
+//             //& Delete All Old Session and Clear Cookies From Browser :
+//             await sessionModel.deleteMany({ user: user._id });
+//             res.clearCookie("accessToken");
+//             res.clearCookie("refreshToken");
 
-            return next(new AppError("Expired or Invalid Refresh Token, So Session expired, please  Try login again" , 403)) ;
-         }
-      }
-   ) ;
-
-
-
+//             return next(new AppError("Expired or Invalid Refresh Token, So Session expired, please  Try login again" , 403)) ;
+//          }
+//       }
+//    ) ;
 
 
 
 
 
-//& All Steps Change Password :
-   //^ Change Password :
-   export const changePassword = catchError(
-      async(req , res , next)=>{
-         const {password , rePassword , oldPassword} = req.body ;
-         const userAgent = req.headers["user-agent"] ;
-         const sessionID =  nanoid() ;
-         const deviceIP =
-            req.headers["x-forwarded-for"]?.split(",")[0] ||      // لو السيرفر وراه Proxy
-            req.connection?.remoteAddress || 
-            req.socket?.remoteAddress ||
-            req.ip ;
+
+
+
+// //& All Steps Change Password :
+//    //^ Change Password :
+//    export const changePassword = catchError(
+//       async(req , res , next)=>{
+//          const {password , rePassword , oldPassword} = req.body ;
+//          const userAgent = req.headers["user-agent"] ;
+//          const sessionID =  nanoid() ;
+//          const deviceIP =
+//             req.headers["x-forwarded-for"]?.split(",")[0] ||      // لو السيرفر وراه Proxy
+//             req.connection?.remoteAddress || 
+//             req.socket?.remoteAddress ||
+//             req.ip ;
          
 
-         const user = await userModel.findById(req.user?._id) ;
+//          const user = await userModel.findById(req.user?._id) ;
 
 
-         //& Check User Old Password Correct or Not :
-         if(user && bcrypt.compareSync(oldPassword , user.password)) {
-            user.password = password ;
-            user.passwordChangedAt = Date.now() ;
-            await user.save() ;
-         }else{
-            return next(new AppError("Email Or Old Password InCorrect" , 404)) ;
-         }
+//          //& Check User Old Password Correct or Not :
+//          if(user && bcrypt.compareSync(oldPassword , user.password)) {
+//             user.password = password ;
+//             user.passwordChangedAt = Date.now() ;
+//             await user.save() ;
+//          }else{
+//             return next(new AppError("Email Or Old Password InCorrect" , 404)) ;
+//          }
 
-         //& Delete All Old Session :
-         await sessionModel.deleteMany({ user: user._id }); 
+//          //& Delete All Old Session :
+//          await sessionModel.deleteMany({ user: user._id }); 
 
 
-         // Device Information Return in Request :
-         const device = {
-            user : user._id ,
-            userAgent ,
-            sessionID ,
-            deviceIP
-         }
+//          // Device Information Return in Request :
+//          const device = {
+//             user : user._id ,
+//             userAgent ,
+//             sessionID ,
+//             deviceIP
+//          }
          
-         // Create Refresh Token And Access Token :
-         const refreshToken = generateRefreshToken(res , device) ;
-         const accessToken = generateAccessToken(res , user) ;
+//          // Create Refresh Token And Access Token :
+//          const refreshToken = generateRefreshToken(res , device) ;
+//          const accessToken = generateAccessToken(res , user) ;
          
-         // Create New Session :
-         await sessionModel.create({
-            user: user._id ,
-            refreshToken ,
-            sessionID ,
-            userAgent ,
-            deviceIP ,
-         });
+//          // Create New Session :
+//          await sessionModel.create({
+//             user: user._id ,
+//             refreshToken ,
+//             sessionID ,
+//             userAgent ,
+//             deviceIP ,
+//          });
 
-         const LoggedUser = await userModel.findById(user._id).select("-password -itemNumber -creationTimeAt") ;
+//          const LoggedUser = await userModel.findById(user._id).select("-password -itemNumber -creationTimeAt") ;
 
-         //*------ Logs Here -------- :
-         // logger.info(`Change Password Successfully.! -  Name:${user.name}  , id:${user._id}`);
-         return res.json({message:"success" , user:LoggedUser})
-      }
-   ) ;
-
-
-
-
-
-//& All Steps Activated Account Email :
-   //^ Send Code :
-   export const sendCodeToEmailActivation = catchError(
-      async (req , res , next)=>{
-         const otp = nanoID() ;
-         const user = await userModel.findById(req.user._id)
-         if(!user) return next(new AppError("User Not Registration" , 401)) ; 
-
-         const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 دقائق
-
-         user.otp_code = otp;
-         user.otpExpiry = expiry;
-         await user.save();
-
-         const subject =  "Activate Your Account for - Enter Company Name ✔" ;
-
-         let codeHtml = ()=>{
-            return `
-               <p style="font-size:16px; font-weight:bold;">Submit this activated code : <span style="display:inline-block ;  padding:2px; letter-spacing: 2px; color:white;  background-color:rgb(143,84,201) ;font-size:18px;">${otp}</span> If you did not request activated account, please ignore this email!</p>
-            `
-         }
-         await sendEmail(user.email , subject , codeHtml )
-
-         //*------ Logs Here -------- :
-         // logger.info(`Send OTP To Personal Email Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
-         res.json({message:"Send OTP To Personal Email Successfully."})
-      }
-   ) ;
-   //^  Confirmed Email :
-   export const confirmedEmail = catchError(
-      async (req , res , next)=>{
-         const {OTP} = req.body ;
-
-         const user = await userModel.findById(req.user._id) ;
-
-         if (!user || user.otp_code !== OTP || user.otpExpiry < new Date()) return next(new AppError("Invalid or expired OTP , Please Enter Correct valid OTP !")) ; 
-
-      const updateUser =  await userModel.findByIdAndUpdate(user._id ,{
-            confirmedEmail:true ,
-            otp_code:null ,
-            otpExpiry:null ,
-         } , {new:true})
-
-         //*------ Logs Here -------- :
-         // logger.info(`Activated Account Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
-         return res.json({message:"Activated Account Successfully" , user:updateUser}) ;
-      }
-   ) ;
+//          //*------ Logs Here -------- :
+//          // logger.info(`Change Password Successfully.! -  Name:${user.name}  , id:${user._id}`);
+//          return res.json({message:"success" , user:LoggedUser})
+//       }
+//    ) ;
 
 
 
 
 
+// //& All Steps Activated Account Email :
+//    //^ Send Code :
+//    export const sendCodeToEmailActivation = catchError(
+//       async (req , res , next)=>{
+//          const otp = nanoID() ;
+//          const user = await userModel.findById(req.user._id)
+//          if(!user) return next(new AppError("User Not Registration" , 401)) ; 
 
+//          const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 دقائق
 
-//& All Steps Forget Password :
-   //^ 1- Send Code To Email :
-   export const sendCodeToEmail = catchError(
-      async (req , res , next)=>{
-         const{email} = req.body ;
+//          user.otp_code = otp;
+//          user.otpExpiry = expiry;
+//          await user.save();
 
-         const otp = nanoID() ;
-         const user = await userModel.findOne({email})
-         if(!user) return next(new AppError("User Not Registration")) ; 
+//          const subject =  "Activate Your Account for - Enter Company Name ✔" ;
 
+//          let codeHtml = ()=>{
+//             return `
+//                <p style="font-size:16px; font-weight:bold;">Submit this activated code : <span style="display:inline-block ;  padding:2px; letter-spacing: 2px; color:white;  background-color:rgb(143,84,201) ;font-size:18px;">${otp}</span> If you did not request activated account, please ignore this email!</p>
+//             `
+//          }
+//          await sendEmail(user.email , subject , codeHtml )
 
+//          //*------ Logs Here -------- :
+//          // logger.info(`Send OTP To Personal Email Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
+//          res.json({message:"Send OTP To Personal Email Successfully."})
+//       }
+//    ) ;
+//    //^  Confirmed Email :
+//    export const confirmedEmail = catchError(
+//       async (req , res , next)=>{
+//          const {OTP} = req.body ;
 
-         const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 دقائق
+//          const user = await userModel.findById(req.user._id) ;
 
-         user.otp_code = otp;
-         user.otpExpiry = expiry;
-         await user.save();
+//          if (!user || user.otp_code !== OTP || user.otpExpiry < new Date()) return next(new AppError("Invalid or expired OTP , Please Enter Correct valid OTP !")) ; 
 
-         let codeHtml = ()=>{
-            return `
-               <p style="font-size:16px; font-weight:bold;">Submit this reset password code : <span style="display:inline-block ;  padding:2px; letter-spacing: 2px; color:white;  background-color:rgb(143,84,201) ;font-size:18px;">${otp}</span> If you did not request a change of password, please ignore this email!</p>
-            `
-         }
-         const subject =  "Your Password Reset Code (valid for 10 minutes) To reset your password."
-         sendEmail(user.email , subject , codeHtml ) ;
+//       const updateUser =  await userModel.findByIdAndUpdate(user._id ,{
+//             confirmedEmail:true ,
+//             otp_code:null ,
+//             otpExpiry:null ,
+//          } , {new:true})
 
-         //*------ Logs Here -------- :
-         // logger.info(`OTP sent to your Email Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
-         res.json({ message: "OTP sent to your email" });
-
-      }
-   ) ;
-   //^ 2- Verify OTP  :
-   export const verifyOTP = catchError(
-      async (req , res , next)=>{
-         const{email , OTP} = req.body ;
-
-         const user = await userModel.findOne({email})
-
-         if (!user || user.otp_code !== OTP || user.otpExpiry < new Date()) return next(new AppError("Invalid or expired OTP , Please Enter Correct valid OTP !")) ; 
-
-         const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' , 20);
-
-         const resetToken = nanoid();
-         const expiry = new Date(Date.now() + 15 * 60 * 1000); // 15 دقيقة صلاحية
-
-         user.resetToken = resetToken;
-         user.resetTokenExpiry = expiry;
-         user.otp_code = null;
-         user.otpExpiry = null;
-         await user.save();
-
-         //*------ Logs Here -------- :
-         // logger.info(`OTP Verified Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
-         res.json({message:"OTP Verified Successfully" , resetToken})
-      }
-   ) ;
-   //^ 3- Reset New Password :
-   export const resetPassword = catchError(
-      async (req , res , next)=>{
-         const { resetToken , newPassword } = req.body;
-         const user = await userModel.findOne({
-            resetToken,
-            resetTokenExpiry: { $gt: new Date() },
-         });
-
-         if(!user) return next(new AppError("Invalid or expired token")) ; 
-
-         user.password = newPassword;
-         user.resetToken = null;
-         user.resetTokenExpiry = null;
-         user.passwordChangedAt = Date.now() ;
-         await user.save()
-
-         let codeHtml = ()=>{
-            return `
-               <p style="font-size:16px; font-weight:bold;">The new forgotten password has been changed. Please don't share this information with anyone and try again login now ! <span style="display:inline-block ;  padding:2px; letter-spacing: 2px; color:white;  background-color:rgb(143,84,201) ;font-size:18px;">${newPassword}</span> If you did not request a change of password, please ignore this email!</p>
-            `
-         } ;
-
-         const subject =  "Your password has been changed. Please do not share this information"
-         sendEmail(user.email , subject , codeHtml ) ;
-
-         //*------ Logs Here ------  :
-         // logger.info(`Reset Password Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
-
-         res.json({message:"Reset Password successfully" , newPassword }) ;
-      }
-   ) ;
+//          //*------ Logs Here -------- :
+//          // logger.info(`Activated Account Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
+//          return res.json({message:"Activated Account Successfully" , user:updateUser}) ;
+//       }
+//    ) ;
 
 
 
 
 
 
-//& Login With Google Account :
-   export const loginWithGoogle = catchError(
-      async (req , res , next) => {
-         const email = req.user.emails[0].value ;
-         const emailVerified = req.user.emails[0].verified ;
-         const userAgent = req.headers["user-agent"] ;
-         const sessionID =  nanoid() ;
-         const deviceIP =
-            req.headers["x-forwarded-for"]?.split(",")[0] ||      // لو السيرفر وراه Proxy
-            req.connection?.remoteAddress || 
-            req.socket?.remoteAddress ||
-            req.ip ;
+
+// //& All Steps Forget Password :
+//    //^ 1- Send Code To Email :
+//    export const sendCodeToEmail = catchError(
+//       async (req , res , next)=>{
+//          const{email} = req.body ;
+
+//          const otp = nanoID() ;
+//          const user = await userModel.findOne({email})
+//          if(!user) return next(new AppError("User Not Registration")) ; 
+
+
+
+//          const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 دقائق
+
+//          user.otp_code = otp;
+//          user.otpExpiry = expiry;
+//          await user.save();
+
+//          let codeHtml = ()=>{
+//             return `
+//                <p style="font-size:16px; font-weight:bold;">Submit this reset password code : <span style="display:inline-block ;  padding:2px; letter-spacing: 2px; color:white;  background-color:rgb(143,84,201) ;font-size:18px;">${otp}</span> If you did not request a change of password, please ignore this email!</p>
+//             `
+//          }
+//          const subject =  "Your Password Reset Code (valid for 10 minutes) To reset your password."
+//          sendEmail(user.email , subject , codeHtml ) ;
+
+//          //*------ Logs Here -------- :
+//          // logger.info(`OTP sent to your Email Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
+//          res.json({ message: "OTP sent to your email" });
+
+//       }
+//    ) ;
+//    //^ 2- Verify OTP  :
+//    export const verifyOTP = catchError(
+//       async (req , res , next)=>{
+//          const{email , OTP} = req.body ;
+
+//          const user = await userModel.findOne({email})
+
+//          if (!user || user.otp_code !== OTP || user.otpExpiry < new Date()) return next(new AppError("Invalid or expired OTP , Please Enter Correct valid OTP !")) ; 
+
+//          const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' , 20);
+
+//          const resetToken = nanoid();
+//          const expiry = new Date(Date.now() + 15 * 60 * 1000); // 15 دقيقة صلاحية
+
+//          user.resetToken = resetToken;
+//          user.resetTokenExpiry = expiry;
+//          user.otp_code = null;
+//          user.otpExpiry = null;
+//          await user.save();
+
+//          //*------ Logs Here -------- :
+//          // logger.info(`OTP Verified Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
+//          res.json({message:"OTP Verified Successfully" , resetToken})
+//       }
+//    ) ;
+//    //^ 3- Reset New Password :
+//    export const resetPassword = catchError(
+//       async (req , res , next)=>{
+//          const { resetToken , newPassword } = req.body;
+//          const user = await userModel.findOne({
+//             resetToken,
+//             resetTokenExpiry: { $gt: new Date() },
+//          });
+
+//          if(!user) return next(new AppError("Invalid or expired token")) ; 
+
+//          user.password = newPassword;
+//          user.resetToken = null;
+//          user.resetTokenExpiry = null;
+//          user.passwordChangedAt = Date.now() ;
+//          await user.save()
+
+//          let codeHtml = ()=>{
+//             return `
+//                <p style="font-size:16px; font-weight:bold;">The new forgotten password has been changed. Please don't share this information with anyone and try again login now ! <span style="display:inline-block ;  padding:2px; letter-spacing: 2px; color:white;  background-color:rgb(143,84,201) ;font-size:18px;">${newPassword}</span> If you did not request a change of password, please ignore this email!</p>
+//             `
+//          } ;
+
+//          const subject =  "Your password has been changed. Please do not share this information"
+//          sendEmail(user.email , subject , codeHtml ) ;
+
+//          //*------ Logs Here ------  :
+//          // logger.info(`Reset Password Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
+
+//          res.json({message:"Reset Password successfully" , newPassword }) ;
+//       }
+//    ) ;
+
+
+
+
+
+
+// //& Login With Google Account :
+//    export const loginWithGoogle = catchError(
+//       async (req , res , next) => {
+//          const email = req.user.emails[0].value ;
+//          const emailVerified = req.user.emails[0].verified ;
+//          const userAgent = req.headers["user-agent"] ;
+//          const sessionID =  nanoid() ;
+//          const deviceIP =
+//             req.headers["x-forwarded-for"]?.split(",")[0] ||      // لو السيرفر وراه Proxy
+//             req.connection?.remoteAddress || 
+//             req.socket?.remoteAddress ||
+//             req.ip ;
          
-         let user = await userModel.findOne({email} ) ;
-         if(!user) return next(new AppError("User Not Exist..❌" , 404)) ;
+//          let user = await userModel.findOne({email} ) ;
+//          if(!user) return next(new AppError("User Not Exist..❌" , 404)) ;
          
-         //& Check Blocked User Or Not :
-         if(user.isBlocked){ 
+//          //& Check Blocked User Or Not :
+//          if(user.isBlocked){ 
 
-            //*------ Logs Here -------- :
-            // logger.info(`Unauthorized Logged By Google, User Blocked..❌ -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
-            return next(new AppError("Unauthorized, User Blocked..❌" , 401)) ;
-         }
+//             //*------ Logs Here -------- :
+//             // logger.info(`Unauthorized Logged By Google, User Blocked..❌ -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
+//             return next(new AppError("Unauthorized, User Blocked..❌" , 401)) ;
+//          }
 
-         if(!user){
-            user = await userModel.create({
-               name:req.user.displayName ,
-               googleId:req.user.id ,
-               email ,
-               confirmedEmail:emailVerified ,
-               isCompleteProfile: false
-            })
-         }else {
-            user.googleId = req.user.id ;
-            user.confirmedEmail = emailVerified ;
-            await user.save() ;
-         }
-
-
-         // Device Information Return in Request :
-         const device = {
-            user :user._id ,
-            userAgent ,
-            sessionID ,
-            deviceIP 
-         }
+//          if(!user){
+//             user = await userModel.create({
+//                name:req.user.displayName ,
+//                googleId:req.user.id ,
+//                email ,
+//                confirmedEmail:emailVerified ,
+//                isCompleteProfile: false
+//             })
+//          }else {
+//             user.googleId = req.user.id ;
+//             user.confirmedEmail = emailVerified ;
+//             await user.save() ;
+//          }
 
 
-         // Create Refresh Token And Access Token :
-         const refreshToken = generateRefreshToken(res , device) ;
-         const accessToken = generateAccessToken(res , user) ;
+//          // Device Information Return in Request :
+//          const device = {
+//             user :user._id ,
+//             userAgent ,
+//             sessionID ,
+//             deviceIP 
+//          }
 
 
-         // Delete Any Session To This Device :
-         await sessionModel.findOneAndDelete({user: user._id, deviceIP, userAgent}) ;
+//          // Create Refresh Token And Access Token :
+//          const refreshToken = generateRefreshToken(res , device) ;
+//          const accessToken = generateAccessToken(res , user) ;
 
-         // Create Session :
-         await sessionModel.create({
-            user : user._id ,
-            refreshToken : refreshToken.token ,
-            userAgent ,
-            sessionID ,
-            deviceIP 
-         }) ;
 
-         //*------ Logs Here -------- :
-         // logger.info(`Login Google Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
-         res.redirect(`${process.env.REDIRECT_URL_GOOGLE}/#/user/LoginSuccessGoogle`);
-      }
-   ) ;
+//          // Delete Any Session To This Device :
+//          await sessionModel.findOneAndDelete({user: user._id, deviceIP, userAgent}) ;
+
+//          // Create Session :
+//          await sessionModel.create({
+//             user : user._id ,
+//             refreshToken : refreshToken.token ,
+//             userAgent ,
+//             sessionID ,
+//             deviceIP 
+//          }) ;
+
+//          //*------ Logs Here -------- :
+//          // logger.info(`Login Google Successfully.! -  Name:${user.name} , Email:${user.email}  , id:${user._id}`);
+//          res.redirect(`${process.env.REDIRECT_URL_GOOGLE}/#/user/LoginSuccessGoogle`);
+//       }
+//    ) ;
 
 
 
@@ -480,14 +480,14 @@ const NODE_ENV = process.env.NODE_ENV ;
 
 
 
-//& Log Out From All Devices :
-   export const logOutAllDevices = async (req, res, next) => {
-      await sessionModel.deleteMany({ user: req.user._id });
+// //& Log Out From All Devices :
+//    export const logOutAllDevices = async (req, res, next) => {
+//       await sessionModel.deleteMany({ user: req.user._id });
 
-      res.clearCookie("refreshToken");
-      res.clearCookie("accessToken");
+//       res.clearCookie("refreshToken");
+//       res.clearCookie("accessToken");
 
-      //*------ Logs Here -------- :
-      // logger.info(`Logged out from all devices Successfully.! -  Name:${req.user.name} , Email:${req.user.email}  , id:${req.user._id}`);
-      res.json({ message: "Logged out successfully from all devices" });
-   } ;
+//       //*------ Logs Here -------- :
+//       // logger.info(`Logged out from all devices Successfully.! -  Name:${req.user.name} , Email:${req.user.email}  , id:${req.user._id}`);
+//       res.json({ message: "Logged out successfully from all devices" });
+//    } ;

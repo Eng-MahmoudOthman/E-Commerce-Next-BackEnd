@@ -8,7 +8,7 @@ import { catchError } from "../../utilities/catchError.js";
 // import { logger } from "../../utilities/logger.js";
 
 
-const uploadImageSize = Number(process.env.UPLOAD_IMAGE_SIZE) || 2000000;
+// const uploadImageSize = Number(process.env.UPLOAD_IMAGE_SIZE) || 2000000;
 
 
 

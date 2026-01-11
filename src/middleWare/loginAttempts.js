@@ -24,7 +24,6 @@ export const checkLoginAttempts = async (req, res, next) => {
    if (user.lockUntil && user.lockUntil > Date.now()) {
 
       //*------ Logs Here -------- :
-      // logger.warn(`Too many attempts. Account locked.! -  Name:${user.name} , id:${user._id}`);
       return next(new AppError("Account locked. Try again later after 5 minutes .!", 403));
    }
 

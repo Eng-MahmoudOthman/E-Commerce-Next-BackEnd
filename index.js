@@ -9,7 +9,7 @@ import express from 'express'
 import { initApp } from './src/initApp.js';
 import { dbConnection } from './DataBase/dbConnection.js';
 import env from "dotenv"
-import { webhookMiddleWre } from './src/modules/order/order.controller.js';
+// import { webhookMiddleWre } from './src/modules/order/order.controller.js';
 import { applySecurityMiddlewares } from './src/middleWare/security.js';
 import cookieParser from "cookie-parser";
 
@@ -80,7 +80,7 @@ app.use("/pdf" , express.static("Docs")) ;
 
 
 //& Receive Webhook From Paymob :
-app.post("/webhook" , webhookMiddleWre)
+// app.post("/webhook" , webhookMiddleWre)
 
 console.log("🚀 New version deployed !!!");
 

@@ -2,7 +2,6 @@ import { userModel } from "../../DataBase/models/user.model.js";
 import { AppError } from "../utilities/AppError.js";
 import { catchError } from "../utilities/catchError.js";
 import jwt from "jsonwebtoken";
-// import { logger } from "../utilities/logger.js";
 
 
 
@@ -15,7 +14,6 @@ export const protectedRoutes = catchError(
       if (!token){
 
          //*------ Logs Here -------- :
-         // logger.error(`Token Not Exist, Unauthorized!`);
          return next(new AppError("Token Not Exist, Unauthorized!" , 401)) ;
       }
 
@@ -33,7 +31,6 @@ export const protectedRoutes = catchError(
          if(user.isBlocked){
 
             //*------ Logs Here -------- :
-            // logger.error(`Unauthorized, User Blocked..❌-  Name:${user.name} , id:${user._id}`);
             return next(new AppError("Unauthorized, User Blocked..❌" , 401)) ;
          }
          
