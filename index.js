@@ -86,15 +86,16 @@ console.log("🚀 New version deployed !!!");
 
 initApp(app)
 
-//& Data Base Connection :
-dbConnection() ;
-
-export const server = app.listen(PORT , () => {
-   //*------ Logs Here -------- :
-   // logger.info(`✅ Server is running Successfully...`);
-   console.log(`✅ Server is running ....`)
-}) ;
-
+const startServer = () => {
+      try {
+         dbConnection() ;
+         const server = app.listen(PORT , () => console.log(`✅  Server is running ....`)) ;
+         //& Socket io Connection :
+      } catch (err) {
+         console.log(err) ;
+      }
+}
+startServer() ;
 
 
 
