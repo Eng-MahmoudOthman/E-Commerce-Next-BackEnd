@@ -9,7 +9,7 @@ import express from 'express'
 import { initApp } from './src/initApp.js';
 import { dbConnection } from './DataBase/dbConnection.js';
 import env from "dotenv"
-// import { webhookMiddleWre } from './src/modules/order/order.controller.js';
+import { webhookMiddleWre } from './src/modules/order/order.controller.js';
 import { applySecurityMiddlewares } from './src/middleWare/security.js';
 import cookieParser from "cookie-parser";
 
@@ -22,9 +22,8 @@ import cookieParser from "cookie-parser";
 
 
 //!========================================================================================
-// import passport from 'passport';
-// import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-// import { logger } from './src/utilities/logger.js';
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 //!========================================================================================
 
 
@@ -53,17 +52,17 @@ const PORT = process.env.PORT || 5000 ;
 
 //!========================================================================================
    //* Login With Google :
-      // app.use(passport.initialize());
-      // passport.use(
-      //    new GoogleStrategy(
-      //    {
-      //       clientID: process.env.GOOGLE_CLIENT_ID,
-      //       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      //       callbackURL: `${process.env.BASE_URL}/api/v1/auth/google/callback`,
-      //    },(accessToken, refreshToken, profile, done) => {done(null, profile);})
-      // );
-      // passport.serializeUser((user, done) => done(null, user));
-      // passport.deserializeUser((obj, done) => done(null, obj));
+      app.use(passport.initialize());
+      passport.use(
+         new GoogleStrategy(
+         {
+            clientID: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            callbackURL: `${process.env.BASE_URL}/api/v1/auth/google/callback`,
+         },(accessToken, refreshToken, profile, done) => {done(null, profile);})
+      );
+      passport.serializeUser((user, done) => done(null, user));
+      passport.deserializeUser((obj, done) => done(null, obj));
 //!========================================================================================
 
 
@@ -74,13 +73,8 @@ const PORT = process.env.PORT || 5000 ;
 
 
 
-//! Serve static files :
-// app.use("/" , express.static("Uploads")) ;
-// app.use("/pdf" , express.static("Docs")) ;
-
-
 //& Receive Webhook From Paymob :
-// app.post("/webhook" , webhookMiddleWre)
+app.post("/webhook" , webhookMiddleWre)
 
 console.log("🚀 New version deployed !!!");
 
@@ -101,7 +95,12 @@ startServer() ;
 
 
 
+
+
 //! Handle Error dbConnection And External Express => End the Code :
 process.on("unhandledRejection" , (error)=>{
    console.log("❌ Error" , error);
 });
+
+
+
