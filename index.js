@@ -25,7 +25,6 @@ import cookieParser from "cookie-parser";
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { logger } from './src/utilities/logger.js';
-import { sendEmail_By_SendGrid } from './src/Emails/sendEmail.js';
 //!========================================================================================
 
 

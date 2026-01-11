@@ -129,52 +129,52 @@ const isProduction = process.env.NODE_ENV === "production";
 
 // ------------------- Logger عام -------------------
 const logger = createLogger({
-   level: "info",
-   format: format.combine(
-      format.timestamp({
-         format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss")
-      }),
-      format.json()
-   ),
-   transports: isProduction
-      ? [
-         new transports.Console() // على Production Console بس
-         ]
-      : [
-         new transports.Console(), // على Local Console كمان
-         new DailyRotateFile({
-            dirname: "logs/log",
-            filename: "app-%DATE%.log",
-            datePattern: "YYYY-MM-DD",
-            zippedArchive: true,
-            maxSize: "20m",
-            maxFiles: "30d"
-         })
-         ]
+   // level: "info",
+   // format: format.combine(
+   //    format.timestamp({
+   //       format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss")
+   //    }),
+   //    format.json()
+   // ),
+   // transports: isProduction
+   //    ? [
+   //       new transports.Console() // على Production Console بس
+   //       ]
+   //    : [
+   //       new transports.Console(), // على Local Console كمان
+   //       new DailyRotateFile({
+   //          dirname: "logs/log",
+   //          filename: "app-%DATE%.log",
+   //          datePattern: "YYYY-MM-DD",
+   //          zippedArchive: true,
+   //          maxSize: "20m",
+   //          maxFiles: "30d"
+   //       })
+   //       ]
 });
 
 // ------------------- Logger للـ Requests -------------------
 const requestLogger = createLogger({
-   level: "info",
-   format: format.combine(
-      format.timestamp({
-         format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss")
-      }),
-      format.json()
-   ),
-   transports: isProduction
-      ? [new transports.Console()] // على Production Console بس
-      : [
-         new transports.Console(),
-         new DailyRotateFile({
-            dirname: "logs/requests",
-            filename: "request-%DATE%.log",
-            datePattern: "YYYY-MM-DD",
-            zippedArchive: true,
-            maxSize: "20m",
-            maxFiles: "30d"
-         })
-      ]
+   // level: "info",
+   // format: format.combine(
+   //    format.timestamp({
+   //       format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss")
+   //    }),
+   //    format.json()
+   // ),
+   // transports: isProduction
+   //    ? [new transports.Console()] // على Production Console بس
+   //    : [
+   //       new transports.Console(),
+   //       new DailyRotateFile({
+   //          dirname: "logs/requests",
+   //          filename: "request-%DATE%.log",
+   //          datePattern: "YYYY-MM-DD",
+   //          zippedArchive: true,
+   //          maxSize: "20m",
+   //          maxFiles: "30d"
+   //       })
+   //    ]
 });
 
 export { logger, requestLogger };
