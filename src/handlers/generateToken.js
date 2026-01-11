@@ -27,8 +27,8 @@ export function  generateAccessToken(res , user){
    res.cookie( "accessToken" , token , {
       httpOnly: true,
       secure: NODE_ENV === "production" ,              // خليها true في HTTPS
-      sameSite: "strict", // Use strict if front and back same domain
-      // sameSite: NODE_ENV === "production" ? "None" : "Lax",
+      // sameSite: "strict", // Use strict if front and back same domain
+      sameSite: NODE_ENV === "production" ? "None" : "Lax",
       maxAge:  ms(TOKEN_EXPIRATION_ACCESS)   //ms Library Formate (1d) to MilliSecond 
    });
    return token ;
@@ -52,8 +52,8 @@ export function  generateRefreshToken(res , device , isRememberMe){
    res.cookie( "refreshToken" , token , {
       httpOnly: true,
       secure: NODE_ENV === "production" ,              // خليها true في HTTPS
-      sameSite: "strict", // Use strict if front and back same domain
-      // sameSite: NODE_ENV === "production" ? "None" : "Lax",
+      // sameSite: "strict", // Use strict if front and back same domain
+      sameSite: NODE_ENV === "production" ? "None" : "Lax",
       maxAge:  ms(duration)   //ms Library Formate (1d) to MilliSecond 
    });
    return {token , duration} ;
