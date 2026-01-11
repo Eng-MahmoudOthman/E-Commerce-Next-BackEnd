@@ -116,34 +116,104 @@
 
 
 
+// import moment from "moment-timezone";
+// import { createLogger, transports, format } from "winston";
+// import DailyRotateFile from "winston-daily-rotate-file";
+
+// const isProduction = process.env.NODE_ENV === "production";
+
+// // اللوج العام
+// const logger = createLogger({
+//    level: "info",
+//    format: format.combine(
+//       format.timestamp({
+//          format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss")
+//       }),
+//       format.json()
+//    ),
+//    transports: isProduction
+//       ? [new transports.Console()] // على الإنتاج Console فقط
+//       : [
+//          new DailyRotateFile({
+//             dirname: "logs/log",
+//             filename: "app-%DATE%.log",
+//             datePattern: "YYYY-MM-DD",
+//             zippedArchive: true,
+//             maxSize: "20m",
+//             maxFiles: "30d",
+//          }),
+//          // new transports.Console() // ممكن تحط Console كمان للمراقبة محلي
+//       ],
+// });
+
+// // لوج ال Requests
+// const requestLogger = createLogger({
+//    level: "info",
+//    format: format.combine(
+//       format.timestamp({
+//          format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss")
+//       }),
+//       format.json()
+//    ),
+//    transports: isProduction
+//       ? [new transports.Console()]
+//       : [
+//          new DailyRotateFile({
+//             dirname: "logs/requests",
+//             filename: "request-%DATE%.log",
+//             datePattern: "YYYY-MM-DD",
+//             zippedArchive: true,
+//             maxSize: "20m",
+//             maxFiles: "30d",
+//          }),
+//          new transports.Console()
+//       ],
+// });
+
+// export { logger, requestLogger };
+
+
+
+
+
+
 import moment from "moment-timezone";
 import { createLogger, transports, format } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 
 const isProduction = process.env.NODE_ENV === "production";
 
+// transport للـ local بس
+const fileTransport = new DailyRotateFile({
+   dirname: "logs/log",
+   filename: "app-%DATE%.log",
+   datePattern: "YYYY-MM-DD",
+   zippedArchive: true,
+   maxSize: "20m",
+   maxFiles: "30d",
+});
+
+const requestFileTransport = new DailyRotateFile({
+   dirname: "logs/requests",
+   filename: "request-%DATE%.log",
+   datePattern: "YYYY-MM-DD",
+   zippedArchive: true,
+   maxSize: "20m",
+   maxFiles: "30d",
+});
+
 // اللوج العام
 const logger = createLogger({
    level: "info",
    format: format.combine(
       format.timestamp({
-         format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss")
+         format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss"),
       }),
       format.json()
    ),
    transports: isProduction
-      ? [new transports.Console()] // على الإنتاج Console فقط
-      : [
-         new DailyRotateFile({
-            dirname: "logs/log",
-            filename: "app-%DATE%.log",
-            datePattern: "YYYY-MM-DD",
-            zippedArchive: true,
-            maxSize: "20m",
-            maxFiles: "30d",
-         }),
-         // new transports.Console() // ممكن تحط Console كمان للمراقبة محلي
-      ],
+      ? [new transports.Console()] // على Vercel/Production Console فقط
+      : [fileTransport, new transports.Console()],
 });
 
 // لوج ال Requests
@@ -151,23 +221,13 @@ const requestLogger = createLogger({
    level: "info",
    format: format.combine(
       format.timestamp({
-         format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss")
+         format: () => moment().tz("Africa/Cairo").format("YYYY-MM-DD HH:mm:ss"),
       }),
       format.json()
    ),
    transports: isProduction
       ? [new transports.Console()]
-      : [
-         new DailyRotateFile({
-            dirname: "logs/requests",
-            filename: "request-%DATE%.log",
-            datePattern: "YYYY-MM-DD",
-            zippedArchive: true,
-            maxSize: "20m",
-            maxFiles: "30d",
-         }),
-         new transports.Console()
-      ],
+      : [requestFileTransport, new transports.Console()],
 });
 
 export { logger, requestLogger };
