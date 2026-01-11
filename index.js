@@ -22,8 +22,8 @@ import cookieParser from "cookie-parser";
 
 
 //!========================================================================================
-import passport from 'passport';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+// import passport from 'passport';
+// import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 // import { logger } from './src/utilities/logger.js';
 //!========================================================================================
 
@@ -53,17 +53,17 @@ const PORT = process.env.PORT || 5000 ;
 
 //!========================================================================================
    //* Login With Google :
-      app.use(passport.initialize());
-      passport.use(
-         new GoogleStrategy(
-         {
-            clientID: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: `${process.env.BASE_URL}/api/v1/auth/google/callback`,
-         },(accessToken, refreshToken, profile, done) => {done(null, profile);})
-      );
-      passport.serializeUser((user, done) => done(null, user));
-      passport.deserializeUser((obj, done) => done(null, obj));
+      // app.use(passport.initialize());
+      // passport.use(
+      //    new GoogleStrategy(
+      //    {
+      //       clientID: process.env.GOOGLE_CLIENT_ID,
+      //       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      //       callbackURL: `${process.env.BASE_URL}/api/v1/auth/google/callback`,
+      //    },(accessToken, refreshToken, profile, done) => {done(null, profile);})
+      // );
+      // passport.serializeUser((user, done) => done(null, user));
+      // passport.deserializeUser((obj, done) => done(null, obj));
 //!========================================================================================
 
 
