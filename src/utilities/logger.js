@@ -142,7 +142,7 @@ const logger = createLogger({
             maxSize: "20m",
             maxFiles: "30d",
          }),
-         new transports.Console() // ممكن تحط Console كمان للمراقبة محلي
+         // new transports.Console() // ممكن تحط Console كمان للمراقبة محلي
       ],
 });
 

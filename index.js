@@ -105,7 +105,3 @@ export const server = app.listen(PORT , () => {
 process.on("unhandledRejection" , (error)=>{
    console.log("❌ Error" , error);
 });
-
-
-
-      //   "bcrypt": "^5.1.1",
