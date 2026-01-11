@@ -1,0 +1,12 @@
+{"level":"info","message":"✅ Server is running Successfully...","timestamp":"2026-01-08 13:59:44"}
+{"level":"info","message":"MongoDB connected successfully Name: testing_framwork","timestamp":"2026-01-08 13:59:45"}
+{"level":"info","message":"Login User - Name:mahmoud othman abo baker , id:68c079bda244ed3e009f4822","timestamp":"2026-01-08 14:01:32"}
+{"level":"info","message":"Logged Out Successfully.! -  Name:mahmoud othman abo baker , Email:user@gmail.com  , id:68c079bda244ed3e009f4822","timestamp":"2026-01-08 14:15:33"}
+{"level":"info","message":"Login User - Name:mahmoud othman abo baker , id:68c079bda244ed3e009f4822","timestamp":"2026-01-08 14:16:33"}
+{"level":"info","message":"Logged Out Successfully.! -  Name:mahmoud othman abo baker , Email:user@gmail.com  , id:68c079bda244ed3e009f4822","timestamp":"2026-01-08 14:19:51"}
+{"level":"error","message":"Token Not Exist, Unauthorized!","timestamp":"2026-01-08 14:19:56"}
+{"level":"info","message":"Login User - Name:mahmoud othman abo baker , id:68c079bda244ed3e009f4822","timestamp":"2026-01-08 14:20:04"}
+{"level":"info","message":"Logged Out Successfully.! -  Name:mahmoud othman abo baker , Email:user@gmail.com  , id:68c079bda244ed3e009f4822","timestamp":"2026-01-08 14:21:25"}
+{"level":"error","message":"Token Not Exist, Unauthorized!","timestamp":"2026-01-08 14:21:36"}
+{"level":"error","message":"Token Not Exist, Unauthorized!","timestamp":"2026-01-08 14:21:41"}
+{"level":"info","message":"Login User - Name:mahmoud othman abo baker , id:68c079bda244ed3e009f4822","timestamp":"2026-01-08 14:22:01"}
