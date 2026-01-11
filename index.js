@@ -75,8 +75,8 @@ const PORT = process.env.PORT || 5000 ;
 
 
 //! Serve static files :
-app.use("/" , express.static("Uploads")) ;
-app.use("/pdf" , express.static("Docs")) ;
+// app.use("/" , express.static("Uploads")) ;
+// app.use("/pdf" , express.static("Docs")) ;
 
 
 //& Receive Webhook From Paymob :
