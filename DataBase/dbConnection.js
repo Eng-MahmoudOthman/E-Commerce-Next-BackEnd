@@ -1,7 +1,6 @@
 
 
 import mongoose from "mongoose";
-// import { logger } from "../src/utilities/logger.js";
 
 
 
@@ -35,10 +34,8 @@ import mongoose from "mongoose";
 export const dbConnection = async ()=>{
    await mongoose.connect(process.env.URL_CONNECTION_DB_ONLINE_ATLAS).then(()=>{
       console.log(`✅ dbConnect Online  Name: ${process.env.URL_CONNECTION_DB_ONLINE_ATLAS.split("/")[3]} ....`);
-      logger.info(`MongoDB connected successfully Name: ${process.env.URL_CONNECTION_DB_ONLINE_ATLAS.split("/")[3]}`);
    }).catch((error)=>{
       console.log("❌ Fail dbConnection Online ! " );
-      logger.error("MongoDB connection failed", { error });     
    })
 } ;
 
