@@ -12,7 +12,7 @@ import { AppError } from "../../utilities/AppError.js";
 
 
 
-//& Get All Users :
+//& Get All Products :
 export const getAllProduct = catchError(
    async(req , res , next)=>{
       //& Get All Products :
@@ -62,7 +62,7 @@ export const getAllProduct = catchError(
 
 
 
-//& Get All Items : دى الطريقة الصحيحة 
+//& Get All Products : دى الطريقة الصحيحة 
 // export const getAllItems = catchError(async (req, res, next) => {
 //    const apiFeature = new ApiFeature(itemModel.find(), req.query).filter().search().sort().fields();
 
@@ -97,16 +97,16 @@ export const getAllProduct = catchError(
 
 
 
-// //& Get Single Product :
-// export const getSingleProduct = catchError(
-//    async(req , res , next)=>{
-//       const {slug} = req.params ;
-//       const product = await productModel.findOne({slug}) ;
+//& Get Single Product :
+export const getSingleProduct = catchError(
+   async(req , res , next)=>{
+      const {slug} = req.params ;
+      const product = await productModel.findOne({slug}) ;
 
-//       !product && next(new AppError("Product Not Exist" , 404))
-//       product && res.json({message:"success" , product})
-//    }
-// )
+      !product && next(new AppError("Product Not Exist" , 404))
+      product && res.json({message:"success" , product})
+   }
+)
 
 
 // //& Create Product :
