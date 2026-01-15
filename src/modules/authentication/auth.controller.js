@@ -467,13 +467,18 @@ const NODE_ENV = process.env.NODE_ENV ;
    export const logOut = async (req, res, next) => {
       const refreshToken = req.cookies.refreshToken ;
       if (!refreshToken) return next(new AppError("Refresh Token is Required" , 404)) ;
-
       await sessionModel.findOneAndDelete({ refreshToken });
-      res.clearCookie("refreshToken");
-      res.clearCookie("accessToken");
 
-      //*------ Logs Here -------- :
-      // logger.info(`Logged Out Successfully.! -  Name:${req.user.name} , Email:${req.user.email}  , id:${req.user._id}`);
+      
+      // Delete Cookies From Browser :
+      const cookieOptions = {
+         httpOnly: true,
+         secure:  process.env.NODE_ENV  === "production",
+         sameSite:  process.env.NODE_ENV  === "production" ? "None" : "Lax",
+      };
+
+      res.clearCookie("refreshToken", cookieOptions);
+      res.clearCookie("accessToken", cookieOptions);
       res.json({ message: "Logged out successfully" });
    } ;
 
